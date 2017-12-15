@@ -1,18 +1,25 @@
 package org.framework.websocket.handler;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.framework.websocket.bean.Student;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
@@ -37,22 +44,24 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		// 回复一条信息，
 		// session.sendMessage(new TextMessage("reply msg:" +
 		// message.getPayload()));
-		Student s = new Student();
-		s.setId(1);
-		s.setName("离夏");
-		Map<String, Object> map = new HashMap<>();
-		map.put("v1", s);
-		map.put("v2", s);
-		map.put("v3", s);
-		List<Student> list = new ArrayList<>();
-		list.add(s);
-		list.add(s);
-		list.add(s);
-		map.put("list", list);
-		map.put("page", 1);
-		map.put("size", "caosinima");
-		session.sendMessage(new TextMessage(new JSONObject(map).toString()));
-		// session.sendMessage(new );
+		/*
+		 * Student s = new Student(); s.setId(1); s.setName("离夏"); Map<String,
+		 * Object> map = new HashMap<>(); map.put("v1", s); map.put("v2", s);
+		 * map.put("v3", s); List<Student> list = new ArrayList<>();
+		 * list.add(s); list.add(s); list.add(s); map.put("list", list);
+		 * map.put("page", 1); map.put("size", "caosinima");
+		 * session.sendMessage(new TextMessage(new JSONObject(map).toString()));
+		 */
+		String[] array = new String[] {
+				"C:\\Users\\Administrator.JSJAEPVG320SZD7\\Desktop\\20171210083321-ac345982b2b7d0a2d4b4a0d6ccef76094b.png",
+				"V:\\tup\\500d1304cde84.jpg" };
+		String path = array[new Random().nextInt(2)];
+		File file = new File(path);
+		byte[] data = new byte[(int) file.length()];
+		InputStream is = new FileInputStream(file);
+		is.read(data);
+		System.out.println("图片长度：" + data.length);
+		sendMessageToUsers(new BinaryMessage(data));
 	}
 
 	/**
@@ -106,7 +115,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	 * 
 	 * @param message
 	 */
-	public void sendMessageToUsers(TextMessage message) {
+	public void sendMessageToUsers(WebSocketMessage<?> message) {
 		for (WebSocketSession user : users) {
 			try {
 				if (user.isOpen()) {

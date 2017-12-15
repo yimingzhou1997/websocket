@@ -16,15 +16,15 @@
 		if ('WebSocket' in window) {
 			//Websocket的连接  
 			websocket = new WebSocket(
-					"ws://localhost:8080/socket/websocket/socketServer.do");//WebSocket对应的地址  
+					"ws://192.168.16.198:8088/socket/websocket/socketServer.do");//WebSocket对应的地址  
 		} else if ('MozWebSocket' in window) {
 			//Websocket的连接  
 			websocket = new MozWebSocket(
-					"ws://localhost:8080/socket/websocket/socketServer.do");//SockJS对应的地址  
+					"ws://192.168.16.198:8088/socket/websocket/socketServer.do");//SockJS对应的地址  
 		} else {
 			//SockJS的连接  
 			websocket = new SockJS(
-					"http://localhost:8080/websocket/socketServer.do"); //SockJS对应的地址  
+					"http://192.168.16.198:8088/websocket/socketServer.do"); //SockJS对应的地址  
 		}
 		websocket.onopen = onOpen;
 		websocket.onmessage = onMessage;
@@ -35,7 +35,17 @@
 		}
 		function onMessage(evt) {
 			try {
-				console.log(eval("(" + evt.data + ")"));
+				//console.log(eval("(" + evt.data + ")"));
+				//document.getElementById('img').src = 'data:image/jpg;'+ evt.data;
+				var reader = new FileReader();
+				reader.onload = function(evt) {
+					if (evt.target.readyState == FileReader.DONE) {
+						var url = evt.target.result;
+						var img = document.getElementById("img");
+						img.innerHTML = "<img src = "+url+" />";
+					}
+				}
+				reader.readAsDataURL(evt.data);
 			} catch (e) {
 				alert(evt.data);
 			}
@@ -45,24 +55,24 @@
 		function onClose() {
 		}
 		function doSend() {
-			/* if (websocket.readyState == websocket.OPEN) {
+			if (websocket.readyState == websocket.OPEN) {
 				var msg = document.getElementById("inputMsg").value;
 				websocket.send(msg);//调用后台handleTextMessage方法  
 				alert("发送成功!");
 			} else {
 				alert("连接失败!");
-			} */
-			$.ajax({
+			}
+			/* $.ajax({
 				url : "send",
 				type : "POST",
 				data : {
-					sendYou:"89",
-					info:document.getElementById("inputMsg").value
+					sendYou : "89",
+					info : document.getElementById("inputMsg").value
 				},
 				success : function(result) {
 					alert(result)
 				}
-			})
+			}) */
 		}
 		window.close = function() {
 			websocket.onclose();
@@ -71,5 +81,6 @@
 	请输入：
 	<textarea rows="3" cols="100" id="inputMsg" name="inputMsg"></textarea>
 	<button onclick="doSend();">发送</button>
+	<div id="img"></div>
 </body>
 </html>
