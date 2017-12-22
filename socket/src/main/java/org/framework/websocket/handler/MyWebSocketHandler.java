@@ -110,21 +110,26 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		users.remove(session);
 	}
 
-	/**
+	/**单独开启一个线程
 	 * 给所有在线用户发送消息
 	 * 
 	 * @param message
 	 */
-	public void sendMessageToUsers(WebSocketMessage<?> message) {
-		for (WebSocketSession user : users) {
-			try {
-				if (user.isOpen()) {
-					user.sendMessage(message);
+	public void sendMessageToUsers(final WebSocketMessage<?> message) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for (WebSocketSession user : users) {
+					try {
+						if (user.isOpen()) {
+							user.sendMessage(message);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
-		}
+		}).start();
 	}
 
 	/**
