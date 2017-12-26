@@ -16,7 +16,6 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 public class MyWebSocketInterceptor implements HandshakeInterceptor {
 	private final static Logger LOGGER = LoggerFactory.getLogger(MyWebSocketInterceptor.class);
 
-	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse serverHttpResponse,
 			WebSocketHandler webSocketHandler, Map<String, Object> attributes) throws Exception {
 		if (request instanceof ServletServerHttpRequest) {
@@ -33,8 +32,6 @@ public class MyWebSocketInterceptor implements HandshakeInterceptor {
 		}
 		return true;
 	}
-
-	@Override
 	public void afterHandshake(ServerHttpRequest arg0, ServerHttpResponse arg1, WebSocketHandler arg2, Exception arg3) {
 		System.out.println("After Handshake");
 	}

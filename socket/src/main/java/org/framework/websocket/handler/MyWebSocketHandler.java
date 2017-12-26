@@ -36,7 +36,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	 * @param message
 	 * @throws Exception
 	 */
-	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String username = (String) session.getAttributes().get("WEBSOCKET_USERNAME");
 		// 获取提交过来的消息详情
@@ -70,7 +69,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	 * @param session
 	 * @throws Exception
 	 */
-	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		users.add(session);
 		String username = (String) session.getAttributes().get("WEBSOCKET_USERNAME");
@@ -117,7 +115,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	 */
 	public void sendMessageToUsers(final WebSocketMessage<?> message) {
 		new Thread(new Runnable() {
-			@Override
 			public void run() {
 				for (WebSocketSession user : users) {
 					try {
