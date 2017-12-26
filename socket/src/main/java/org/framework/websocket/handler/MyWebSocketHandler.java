@@ -116,7 +116,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	public void sendMessageToUsers(final WebSocketMessage<?> message) {
 		new Thread(new Runnable() {
 			public void run() {
-				System.out.println("我的一个道姑朋友");
+				System.out.println("我的一个道 姑朋友");
 				for (WebSocketSession user : users) {
 					try {
 						if (user.isOpen()) {
